@@ -119,6 +119,7 @@
                 console.log('Success:', data);
                 // Afficher le message de succès
                 document.getElementById('successMessage').style.display = 'flex';
+                document.getElementById('successMessage').innerHTML = data;
             })
             .catch((error) => {
                 console.error('Error:', error);
