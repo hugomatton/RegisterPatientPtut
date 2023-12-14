@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 250px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .success-message {
+            background-color: #d1fbd4;
+            color: #006400;
+            font-weight: 200;
+            padding: 10px;
+            border: 1px solid #006400;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+    <title>Formulaire Patient</title>
+</head>
+<body>
+
+    <div class="container">
+        <h2 style="font-size: 1.5em; font-weight: bold; margin-bottom: 20px;">Formulaire Patient</h2>
+
+        <form id="patientForm">
+            <label for="firstName">Prénom</label>
+            <input type="text" id="firstName" name="firstName" placeholder="Hervé">
+
+            <label for="lastName">Nom</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Pingaud">
+
+            <label for="gender">Genre</label>
+            <select id="gender" name="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+
+            <label for="birthDate">Date de Naissance</label>
+            <input type="date" id="birthDate" name="birthDate" placeholder="1960-01-01">
+
+            <button type="button" onclick="submitForm()">Je m'enregistre</button>
+
+            <div class="success-message" id="successMessage">Succès de l'envoi!</div>
+        </form>
+    </div>
+
+    <script>
+        function submitForm() {
+            const formData = {
+                resourceType: "Patient",
+                name: [
+                    {
+                        use: "official",
+                        given: [document.getElementById("firstName").value],
+                        family: document.getElementById("lastName").value
+                    }
+                ],
+                gender: document.getElementById("gender").value,
+                birthDate: document.getElementById("birthDate").value
+            };
+
+            // Envoie de la requête POST (simulé ici)
+            fetch('http://3.208.22.199:80/api/patient', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                // Afficher le message de succès
+                document.getElementById('successMessage').style.display = 'flex';
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // Ajouter ici la logique de gestion des erreurs
+            });
+        }
+    </script>
+
+</body>
+</html>
